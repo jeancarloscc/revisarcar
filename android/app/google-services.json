@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "814602654247",
+    "project_id": "revisacar-veicular",
+    "storage_bucket": "revisacar-veicular.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814602654247:android:fe4e9b1b77c178963eb402",
+        "android_client_info": {
+          "package_name": "com.example.revisacar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814602654247-9ko0q7s5m930rl29gee97ku1acg5edrc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.revisacar",
+            "certificate_hash": "2baaa3fda19c9a413a0a328095ad8c1ecb62f7d3"
+          }
+        },
+        {
+          "client_id": "814602654247-2tr7rd3fot1mj85hjae36ajkm3lirepm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyhYEmqjPz3b8-iFBQMMnBHgWFQSKo2jE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814602654247-2tr7rd3fot1mj85hjae36ajkm3lirepm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "814602654247-8sh9ri9evfpsgm8tuic80l2at6ru1616.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.revisacar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
