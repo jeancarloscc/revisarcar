@@ -7,6 +7,7 @@ import '../repositories/lembrete_repository.dart';
 import '../repositories/manutencao_repository.dart';
 import '../services/lembrete_service.dart';
 import '../widgets/veiculo_card.dart';
+import 'calculadora_combustivel_screen.dart';
 import 'configuracoes_screen.dart';
 import 'detalhe_veiculo_screen.dart';
 import 'veiculo_form_screen.dart';
@@ -85,6 +86,12 @@ class VeiculoListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Meus veículos', style: Theme.of(context).textTheme.headlineMedium),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.local_gas_station),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const CalculadoraCombustivelScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () => Navigator.of(context).push(

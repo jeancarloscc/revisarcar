@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../models/abastecimento.dart';
 import '../providers/abastecimento_provider.dart';
 import '../screens/abastecimento_form_screen.dart';
+import '../screens/calculadora_combustivel_screen.dart';
+import '../services/consumo_service.dart';
 import 'confirmar_exclusao_dialog.dart';
 
 class AbastecimentoTab extends StatelessWidget {
@@ -63,6 +65,37 @@ class AbastecimentoTab extends StatelessWidget {
       body: Column(
         children: [
           _resumo(context, abastecimentos),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: OutlinedButton.icon(
+              onPressed: () {
+                final abastecimentoProvider = context.read<AbastecimentoProvider>();
+                final navigator = Navigator.of(context);
+                navigator.push(
+                  MaterialPageRoute(
+                    builder: (_) => CalculadoraCombustivelScreen(
+                      consumoSugerido: ConsumoService.consumoPeriodo(abastecimentos),
+                      aoRegistrarAbastecimento: (litros, valorTotal) {
+                        navigator.pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => ChangeNotifierProvider.value(
+                              value: abastecimentoProvider,
+                              child: AbastecimentoFormScreen(
+                                litrosInicial: litros,
+                                valorTotalInicial: valorTotal,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.calculate_outlined),
+              label: const Text('Calcular viagem'),
+            ),
+          ),
           Expanded(
             child: abastecimentos.isEmpty
                 ? const Center(

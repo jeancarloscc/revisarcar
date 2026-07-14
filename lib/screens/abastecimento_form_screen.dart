@@ -6,8 +6,15 @@ import '../providers/abastecimento_provider.dart';
 
 class AbastecimentoFormScreen extends StatefulWidget {
   final Abastecimento? abastecimento;
+  final double? litrosInicial;
+  final double? valorTotalInicial;
 
-  const AbastecimentoFormScreen({super.key, this.abastecimento});
+  const AbastecimentoFormScreen({
+    super.key,
+    this.abastecimento,
+    this.litrosInicial,
+    this.valorTotalInicial,
+  });
 
   @override
   State<AbastecimentoFormScreen> createState() => _AbastecimentoFormScreenState();
@@ -30,8 +37,12 @@ class _AbastecimentoFormScreenState extends State<AbastecimentoFormScreen> {
     final a = widget.abastecimento;
     _data = a?.data ?? DateTime.now();
     _kmAtualController = TextEditingController(text: a?.kmAtual.toString() ?? '');
-    _litrosController = TextEditingController(text: a?.litros.toString() ?? '');
-    _valorTotalController = TextEditingController(text: a?.valorTotal.toString() ?? '');
+    _litrosController = TextEditingController(
+      text: a?.litros.toString() ?? widget.litrosInicial?.toStringAsFixed(2) ?? '',
+    );
+    _valorTotalController = TextEditingController(
+      text: a?.valorTotal.toString() ?? widget.valorTotalInicial?.toStringAsFixed(2) ?? '',
+    );
     _tanqueCheio = a?.tanqueCheio ?? true;
   }
 
