@@ -46,6 +46,32 @@ class ConsumoService {
     return (ordenados: ordenados, kmTotal: kmTotal);
   }
 
+  static ({int? distancia, double? consumo}) referenciaAnterior(
+    List<Abastecimento> historicoCompleto,
+    Abastecimento atual,
+  ) {
+    final ordenados = List<Abastecimento>.of(historicoCompleto)
+      ..sort((a, b) => a.kmAtual.compareTo(b.kmAtual));
+    final index = ordenados.indexWhere((a) => a.id == atual.id);
+    if (index <= 0) return (distancia: null, consumo: null);
+    final anterior = ordenados[index - 1];
+    final distancia = atual.kmAtual - anterior.kmAtual;
+    if (distancia <= 0) return (distancia: null, consumo: null);
+    return (distancia: distancia, consumo: consumoPorAbastecimento(atual, anterior));
+  }
+
+  static double? mediaConsumoReal(
+    List<Abastecimento> historicoCompleto,
+    List<Abastecimento> subconjunto,
+  ) {
+    final consumos = subconjunto
+        .map((a) => referenciaAnterior(historicoCompleto, a).consumo)
+        .whereType<double>()
+        .toList();
+    if (consumos.isEmpty) return null;
+    return consumos.reduce((a, b) => a + b) / consumos.length;
+  }
+
   static List<Abastecimento> _ordenarPorData(List<Abastecimento> abastecimentos) {
     final copia = List<Abastecimento>.of(abastecimentos);
     copia.sort((a, b) {

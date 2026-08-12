@@ -169,4 +169,82 @@ void main() {
       expect(ConsumoService.custoPorKmPeriodo([]), isNull);
     });
   });
+
+  group('ConsumoService.referenciaAnterior', () {
+    test('retorna distância e consumo nulos para o primeiro abastecimento por km', () {
+      final unico = _abastecimento(
+          id: 'a1', data: DateTime(2026, 1, 1), km: 40000, litros: 30, valor: 180, tanqueCheio: true);
+
+      final referencia = ConsumoService.referenciaAnterior([unico], unico);
+
+      expect(referencia.distancia, isNull);
+      expect(referencia.consumo, isNull);
+    });
+
+    test('calcula distância e consumo entre dois tanques cheios consecutivos', () {
+      final anterior = _abastecimento(
+          id: 'a1', data: DateTime(2026, 1, 1), km: 40000, litros: 30, valor: 180, tanqueCheio: true);
+      final atual = _abastecimento(
+          id: 'a2', data: DateTime(2026, 1, 15), km: 40400, litros: 40, valor: 240, tanqueCheio: true);
+      final historico = [anterior, atual];
+
+      final referencia = ConsumoService.referenciaAnterior(historico, atual);
+
+      expect(referencia.distancia, 400);
+      expect(referencia.consumo, 400 / 40);
+    });
+
+    test('mantém a distância mas consumo nulo quando um dos dois não é tanque cheio', () {
+      final anterior = _abastecimento(
+          id: 'a1', data: DateTime(2026, 1, 1), km: 40000, litros: 30, valor: 180, tanqueCheio: false);
+      final atual = _abastecimento(
+          id: 'a2', data: DateTime(2026, 1, 15), km: 40400, litros: 40, valor: 240, tanqueCheio: true);
+      final historico = [anterior, atual];
+
+      final referencia = ConsumoService.referenciaAnterior(historico, atual);
+
+      expect(referencia.distancia, 400);
+      expect(referencia.consumo, isNull);
+    });
+
+    test('funciona independente da ordem de inserção no histórico', () {
+      final a1 = _abastecimento(
+          id: 'a1', data: DateTime(2026, 1, 1), km: 40000, litros: 30, valor: 180, tanqueCheio: true);
+      final a2 = _abastecimento(
+          id: 'a2', data: DateTime(2026, 1, 15), km: 40400, litros: 40, valor: 240, tanqueCheio: true);
+      final historicoInvertido = [a2, a1];
+
+      final referencia = ConsumoService.referenciaAnterior(historicoInvertido, a2);
+
+      expect(referencia.distancia, 400);
+      expect(referencia.consumo, 400 / 40);
+    });
+  });
+
+  group('ConsumoService.mediaConsumoReal', () {
+    test('calcula a média de consumo real de múltiplos pares válidos', () {
+      final a1 = _abastecimento(
+          id: 'a1', data: DateTime(2026, 1, 1), km: 40000, litros: 30, valor: 180, tanqueCheio: true);
+      final a2 = _abastecimento(
+          id: 'a2', data: DateTime(2026, 1, 15), km: 40400, litros: 40, valor: 240, tanqueCheio: true);
+      final a3 = _abastecimento(
+          id: 'a3', data: DateTime(2026, 2, 1), km: 40900, litros: 50, valor: 300, tanqueCheio: true);
+      final historico = [a1, a2, a3];
+
+      // a2 vs a1: 400 km / 40 L = 10 km/L
+      // a3 vs a2: 500 km / 50 L = 10 km/L
+      final media = ConsumoService.mediaConsumoReal(historico, [a2, a3]);
+
+      expect(media, 10.0);
+    });
+
+    test('retorna null quando nenhum par do subconjunto é válido', () {
+      final unico = _abastecimento(
+          id: 'a1', data: DateTime(2026, 1, 1), km: 40000, litros: 30, valor: 180, tanqueCheio: true);
+
+      final media = ConsumoService.mediaConsumoReal([unico], [unico]);
+
+      expect(media, isNull);
+    });
+  });
 }
