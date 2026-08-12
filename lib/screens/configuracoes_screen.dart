@@ -1,5 +1,6 @@
 // lib/screens/configuracoes_screen.dart
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../models/veiculo.dart';
@@ -148,6 +149,30 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
                   },
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          _secao(
+            context,
+            'Sobre o app',
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                final versao = snapshot.data?.version ?? '—';
+                return Column(
+                  children: [
+                    ListTile(
+                      title: const Text('Versão'),
+                      trailing: Text(versao, style: TextStyle(color: Colors.grey.shade600)),
+                    ),
+                    const Divider(height: 1),
+                    const ListTile(
+                      title: Text('Sincronização'),
+                      trailing: Text('Automática', style: TextStyle(color: Colors.grey)),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           const SizedBox(height: 24),
