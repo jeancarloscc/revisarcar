@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -238,8 +239,11 @@ class _AbastecimentoFormScreenState extends State<AbastecimentoFormScreen> {
       debugPrint('Erro ao salvar abastecimento: $erro\n$stack');
       if (mounted) {
         setState(() => _salvando = false);
+        // O código do FirebaseException (permission-denied, unavailable, ...) é a
+        // única pista visível sem cabo/logcat quando o salvamento falha no device.
+        final detalhe = erro is FirebaseException ? ' (${erro.code})' : '';
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Não foi possível salvar. Tente novamente.')),
+          SnackBar(content: Text('Não foi possível salvar$detalhe. Tente novamente.')),
         );
       }
     }

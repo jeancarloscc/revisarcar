@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"revisacar-veicular","appId":"1:814602654247:android:fe4e9b1b77c178963eb402","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"revisacar-veicular","configurations":{"android":"1:814602654247:android:fe4e9b1b77c178963eb402","ios":"1:814602654247:ios:27d85df71ee0f5a83eb402"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "revisacar-veicular",
+          "appId": "1:814602654247:android:fe4e9b1b77c178963eb402",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "revisacar-veicular",
+          "configurations": {
+            "android": "1:814602654247:android:fe4e9b1b77c178963eb402",
+            "ios": "1:814602654247:ios:27d85df71ee0f5a83eb402"
+          }
+        }
+      }
+    }
+  }
+}
