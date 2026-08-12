@@ -117,7 +117,19 @@ class LembreteTab extends StatelessWidget {
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   confirmDismiss: (_) => _excluir(context, provider, lembrete.id),
-                  child: Container(
+                  child: GestureDetector(
+                    onTap: () {
+                      final lembreteProvider = context.read<LembreteProvider>();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ChangeNotifierProvider.value(
+                            value: lembreteProvider,
+                            child: LembreteFormScreen(lembrete: lembrete),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
                     margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -174,53 +186,50 @@ class LembreteTab extends StatelessWidget {
                               '${meta.metaData!.month.toString().padLeft(2, '0')}/${meta.metaData!.year}',
                               style: const TextStyle(fontSize: 12),
                             ),
-                          const SizedBox(height: 8),
-                          GestureDetector(
-                            onTap: () {
-                              final lembreteProvider = context.read<LembreteProvider>();
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => ChangeNotifierProvider.value(
-                                    value: lembreteProvider,
-                                    child: LembreteFormScreen(lembrete: lembrete),
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text('Editar regra', style: TextStyle(fontSize: 12, decoration: TextDecoration.underline)),
-                          ),
-                          if (status != StatusLembrete.emDia) ...[
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              width: double.infinity,
-                              child: FilledButton.tonalIcon(
-                                style: FilledButton.styleFrom(backgroundColor: corFundo, foregroundColor: corTexto),
-                                onPressed: () {
-                                  final manutencaoProvider = context.read<ManutencaoProvider>();
-                                  final lembreteProvider = context.read<LembreteProvider>();
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => MultiProvider(
-                                        providers: [
-                                          ChangeNotifierProvider.value(value: manutencaoProvider),
-                                          ChangeNotifierProvider.value(value: lembreteProvider),
-                                        ],
-                                        child: ManutencaoFormScreen(
-                                          tipoInicial: lembrete.tipoManutencao,
-                                          lembreteParaResolver: lembrete,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.check, size: 16),
-                                label: const Text('Marcar como resolvido'),
-                              ),
+                          if (lembrete.intervaloKm != null || lembrete.intervaloDias != null) ...[
+                            const SizedBox(height: 6),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 4,
+                              children: [
+                                if (lembrete.intervaloKm != null)
+                                  _ChipIntervalo('cada ${lembrete.intervaloKm} km'),
+                                if (lembrete.intervaloDias != null)
+                                  _ChipIntervalo('${lembrete.intervaloDias! ~/ 30} meses'),
+                              ],
                             ),
                           ],
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton.tonalIcon(
+                              style: FilledButton.styleFrom(backgroundColor: corFundo, foregroundColor: corTexto),
+                              onPressed: () {
+                                final manutencaoProvider = context.read<ManutencaoProvider>();
+                                final lembreteProvider = context.read<LembreteProvider>();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => MultiProvider(
+                                      providers: [
+                                        ChangeNotifierProvider.value(value: manutencaoProvider),
+                                        ChangeNotifierProvider.value(value: lembreteProvider),
+                                      ],
+                                      child: ManutencaoFormScreen(
+                                        tipoInicial: lembrete.tipoManutencao,
+                                        lembreteParaResolver: lembrete,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                                },
+                                icon: const Icon(Icons.check, size: 16),
+                                label: const Text('Marcar como feito'),
+                              ),
+                            ),
                         ],
                       ),
                     ),
+                  ),
                   ),
                 );
               },
@@ -239,6 +248,27 @@ class LembreteTab extends StatelessWidget {
           );
         },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class _ChipIntervalo extends StatelessWidget {
+  final String texto;
+
+  const _ChipIntervalo(this.texto);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondary,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        texto,
+        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey.shade700),
       ),
     );
   }

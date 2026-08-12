@@ -159,7 +159,7 @@ class _ManutencaoFormScreenState extends State<ManutencaoFormScreen> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
           children: [
             _rotulo('Tipo'),
             GridView.count(
@@ -219,12 +219,10 @@ class _ManutencaoFormScreenState extends State<ManutencaoFormScreen> {
               ),
             ],
             const SizedBox(height: 16),
-            _rotulo('Data realizada'),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(_formatarData(_dataRealizada)),
-              trailing: const Icon(Icons.calendar_today),
-              onTap: _selecionarData,
+            _rotulo('Oficina'),
+            TextFormField(
+              controller: _oficinaController,
+              validator: _obrigatorio,
             ),
             const SizedBox(height: 12),
             _rotulo('Km na data'),
@@ -241,10 +239,12 @@ class _ManutencaoFormScreenState extends State<ManutencaoFormScreen> {
               validator: _decimalObrigatorio,
             ),
             const SizedBox(height: 12),
-            _rotulo('Oficina'),
-            TextFormField(
-              controller: _oficinaController,
-              validator: _obrigatorio,
+            _rotulo('Data realizada'),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(_formatarData(_dataRealizada)),
+              trailing: const Icon(Icons.calendar_today),
+              onTap: _selecionarData,
             ),
             const SizedBox(height: 12),
             _rotulo('Observações'),

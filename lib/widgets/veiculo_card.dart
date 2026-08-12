@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/veiculo.dart';
+import '../theme/app_theme.dart';
 
 class VeiculoCard extends StatelessWidget {
   final Veiculo veiculo;
@@ -55,11 +56,11 @@ class VeiculoCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.speed, size: 12, color: colorScheme.primary),
+                    const Icon(Icons.speed, size: 12, color: kAccentColor),
                     const SizedBox(width: 2),
                     Text(
                       '${veiculo.kmAtual} km',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary),
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: kAccentColor),
                     ),
                   ],
                 ),
@@ -82,10 +83,25 @@ class VeiculoCard extends StatelessWidget {
           ],
         ),
         onTap: onTap,
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline),
-          tooltip: 'Excluir',
-          onPressed: onExcluir,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: colorScheme.error.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: Icon(Icons.delete_outline, color: colorScheme.error, size: 18),
+                tooltip: 'Excluir',
+                onPressed: onExcluir,
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey.shade400),
+          ],
         ),
       ),
     );

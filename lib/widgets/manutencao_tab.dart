@@ -179,34 +179,64 @@ class ManutencaoTab extends StatelessWidget {
                           child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         confirmDismiss: (_) => _excluir(context, provider, manutencao.id),
-                        child: Card(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          child: ListTile(
-                            leading: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: manutencao.tipo.cor.withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Icon(manutencao.tipo.icon, size: 18, color: manutencao.tipo.cor),
-                            ),
-                            title: Text(manutencao.tipo.label),
-                            subtitle: Text(
-                              '${manutencao.oficina} • ${manutencao.kmNaData} km • '
-                              'R\$ ${manutencao.custo.toStringAsFixed(2)}',
-                            ),
-                            onTap: () {
-                              final manutencaoProvider = context.read<ManutencaoProvider>();
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => ChangeNotifierProvider.value(
-                                    value: manutencaoProvider,
-                                    child: ManutencaoFormScreen(manutencao: manutencao),
-                                  ),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(kCardRadius),
+                          onTap: () {
+                            final manutencaoProvider = context.read<ManutencaoProvider>();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ChangeNotifierProvider.value(
+                                  value: manutencaoProvider,
+                                  child: ManutencaoFormScreen(manutencao: manutencao),
                                 ),
-                              );
-                            },
+                              ),
+                            );
+                          },
+                          child: Card(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: manutencao.tipo.cor.withValues(alpha: 0.12),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child:
+                                        Icon(manutencao.tipo.icon, size: 18, color: manutencao.tipo.cor),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(manutencao.tipo.label,
+                                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                                        Text(
+                                          manutencao.oficina,
+                                          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          '${_formatarData(manutencao.dataRealizada)} · ${manutencao.kmNaData} km',
+                                          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'R\$ ${manutencao.custo.toStringAsFixed(2)}',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       );
