@@ -4,15 +4,18 @@ import 'package:provider/provider.dart';
 
 import '../models/veiculo.dart';
 import '../providers/abastecimento_provider.dart';
+import '../providers/checklist_provider.dart';
 import '../providers/lembrete_provider.dart';
 import '../providers/manutencao_provider.dart';
 import '../providers/veiculo_provider.dart';
 import '../repositories/abastecimento_repository.dart';
+import '../repositories/checklist_repository.dart';
 import '../repositories/lembrete_repository.dart';
 import '../repositories/manutencao_repository.dart';
 import '../repositories/veiculo_repository.dart';
 import '../services/lembrete_service.dart';
 import '../widgets/abastecimento_tab.dart';
+import '../widgets/checklist_tab.dart';
 import '../widgets/lembrete_tab.dart';
 import '../widgets/manutencao_tab.dart';
 import 'veiculo_form_screen.dart';
@@ -60,6 +63,12 @@ class _DetalheVeiculoScreenState extends State<DetalheVeiculoScreen> {
         ChangeNotifierProvider<LembreteProvider>(
           create: (context) => LembreteProvider(
             repository: LembreteRepository(),
+            uid: uid,
+          )..escutarVeiculo(widget.veiculo.id),
+        ),
+        ChangeNotifierProvider<ChecklistProvider>(
+          create: (context) => ChecklistProvider(
+            repository: ChecklistRepository(),
             uid: uid,
           )..escutarVeiculo(widget.veiculo.id),
         ),
@@ -185,6 +194,7 @@ class _DetalheVeiculoScreenState extends State<DetalheVeiculoScreen> {
                     ManutencaoTab(kmAtual: veiculoAtual.kmAtual),
                     const AbastecimentoTab(),
                     LembreteTab(kmAtual: veiculoAtual.kmAtual),
+                    ChecklistTab(veiculoId: widget.veiculo.id),
                   ],
                 ),
               ),
@@ -198,6 +208,7 @@ class _DetalheVeiculoScreenState extends State<DetalheVeiculoScreen> {
               NavigationDestination(icon: Icon(Icons.build), label: 'Manutenções'),
               NavigationDestination(icon: Icon(Icons.local_gas_station), label: 'Abastecimentos'),
               NavigationDestination(icon: Icon(Icons.notifications), label: 'Lembretes'),
+              NavigationDestination(icon: Icon(Icons.checklist), label: 'Checklist'),
             ],
           ),
         );

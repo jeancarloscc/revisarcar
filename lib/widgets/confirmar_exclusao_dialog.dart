@@ -4,6 +4,7 @@ Future<bool> confirmarExclusaoDialog(
   BuildContext context, {
   required String titulo,
   required String mensagem,
+  String textoConfirmar = 'Excluir',
 }) async {
   final confirmar = await showDialog<bool>(
     context: context,
@@ -17,7 +18,7 @@ Future<bool> confirmarExclusaoDialog(
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Excluir'),
+          child: Text(textoConfirmar),
         ),
       ],
     ),
