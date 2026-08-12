@@ -8,15 +8,15 @@ void main() {
       home: CalculadoraCombustivelScreen(consumoSugerido: 12.5),
     ));
 
-    final consumoField = tester.widget<TextFormField>(find.byType(TextFormField).at(1));
+    final consumoField = tester.widget<TextFormField>(find.byType(TextFormField).at(0));
     expect(consumoField.controller!.text, '12.5');
   });
 
   testWidgets('não mostra botão de registrar quando aoRegistrarAbastecimento não é fornecido', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: CalculadoraCombustivelScreen()));
 
-    await tester.enterText(find.byType(TextFormField).at(0), '6');
-    await tester.enterText(find.byType(TextFormField).at(1), '10');
+    await tester.enterText(find.byType(TextFormField).at(0), '10');
+    await tester.enterText(find.byType(TextFormField).at(1), '6');
     await tester.enterText(find.byType(TextFormField).at(2), '400');
     await tester.pump();
 
@@ -36,8 +36,8 @@ void main() {
       ),
     ));
 
-    await tester.enterText(find.byType(TextFormField).at(0), '6');
-    await tester.enterText(find.byType(TextFormField).at(1), '10');
+    await tester.enterText(find.byType(TextFormField).at(0), '10');
+    await tester.enterText(find.byType(TextFormField).at(1), '6');
     await tester.enterText(find.byType(TextFormField).at(2), '400');
     await tester.pump();
 
@@ -64,8 +64,8 @@ void main() {
     await tester.tap(find.text('Orçamento → alcance'));
     await tester.pump();
 
-    await tester.enterText(find.byType(TextFormField).at(0), '6');
-    await tester.enterText(find.byType(TextFormField).at(1), '10');
+    await tester.enterText(find.byType(TextFormField).at(0), '10');
+    await tester.enterText(find.byType(TextFormField).at(1), '6');
     await tester.enterText(find.byType(TextFormField).at(2), '120');
     await tester.pump();
 
