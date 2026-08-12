@@ -1,5 +1,7 @@
 import 'firestore_date.dart';
 
+enum TipoCombustivel { gasolina, etanol, diesel }
+
 class Abastecimento {
   final String id;
   final String veiculoId;
@@ -8,6 +10,8 @@ class Abastecimento {
   final double litros;
   final double valorTotal;
   final bool tanqueCheio;
+  final String? posto;
+  final TipoCombustivel tipoCombustivel;
 
   const Abastecimento({
     required this.id,
@@ -17,6 +21,8 @@ class Abastecimento {
     required this.litros,
     required this.valorTotal,
     required this.tanqueCheio,
+    this.posto,
+    this.tipoCombustivel = TipoCombustivel.gasolina,
   });
 
   factory Abastecimento.fromMap(String id, String veiculoId, Map<String, dynamic> map) {
@@ -28,6 +34,10 @@ class Abastecimento {
       litros: (map['litros'] as num).toDouble(),
       valorTotal: (map['valorTotal'] as num).toDouble(),
       tanqueCheio: map['tanqueCheio'] as bool,
+      posto: map['posto'] as String?,
+      tipoCombustivel: map['tipoCombustivel'] == null
+          ? TipoCombustivel.gasolina
+          : TipoCombustivel.values.byName(map['tipoCombustivel'] as String),
     );
   }
 
@@ -38,6 +48,8 @@ class Abastecimento {
       'litros': litros,
       'valorTotal': valorTotal,
       'tanqueCheio': tanqueCheio,
+      'posto': posto,
+      'tipoCombustivel': tipoCombustivel.name,
     };
   }
 
@@ -50,9 +62,20 @@ class Abastecimento {
       other.kmAtual == kmAtual &&
       other.litros == litros &&
       other.valorTotal == valorTotal &&
-      other.tanqueCheio == tanqueCheio;
+      other.tanqueCheio == tanqueCheio &&
+      other.posto == posto &&
+      other.tipoCombustivel == tipoCombustivel;
 
   @override
-  int get hashCode =>
-      Object.hash(id, veiculoId, data, kmAtual, litros, valorTotal, tanqueCheio);
+  int get hashCode => Object.hash(
+        id,
+        veiculoId,
+        data,
+        kmAtual,
+        litros,
+        valorTotal,
+        tanqueCheio,
+        posto,
+        tipoCombustivel,
+      );
 }

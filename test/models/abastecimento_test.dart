@@ -33,5 +33,39 @@ void main() {
 
       expect(abastecimento.tanqueCheio, isFalse);
     });
+
+    test('fromMap aplica defaults para posto/tipoCombustivel quando ausentes (documento antigo)', () {
+      final map = {
+        'data': DateTime(2026, 3, 5),
+        'kmAtual': 45700,
+        'litros': 10.0,
+        'valorTotal': 60.0,
+        'tanqueCheio': false,
+      };
+
+      final abastecimento = Abastecimento.fromMap('a2', 'v1', map);
+
+      expect(abastecimento.posto, isNull);
+      expect(abastecimento.tipoCombustivel, TipoCombustivel.gasolina);
+    });
+
+    test('fromMap/toMap round-trip preserva posto e tipoCombustivel', () {
+      final abastecimento = Abastecimento(
+        id: 'a3',
+        veiculoId: 'v1',
+        data: DateTime(2026, 3, 10),
+        kmAtual: 46000,
+        litros: 40.0,
+        valorTotal: 240.0,
+        tanqueCheio: true,
+        posto: 'Ipiranga Av. Brasil',
+        tipoCombustivel: TipoCombustivel.etanol,
+      );
+
+      final map = abastecimento.toMap();
+      final restaurado = Abastecimento.fromMap('a3', 'v1', map);
+
+      expect(restaurado, abastecimento);
+    });
   });
 }
