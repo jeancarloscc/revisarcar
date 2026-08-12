@@ -36,15 +36,28 @@ class AbastecimentoProvider extends ChangeNotifier {
 
   Future<void> adicionar(Abastecimento abastecimento) async {
     await _repository.add(uid, abastecimento, veiculoId: _veiculoId);
-    await _atualizarKmSeNecessario(abastecimento.kmAtual);
+    await _sincronizarKmDoVeiculo(abastecimento.kmAtual);
   }
 
-  Future<void> atualizar(Abastecimento abastecimento) {
-    return _repository.update(uid, abastecimento.id, abastecimento, veiculoId: _veiculoId);
+  Future<void> atualizar(Abastecimento abastecimento) async {
+    await _repository.update(uid, abastecimento.id, abastecimento, veiculoId: _veiculoId);
+    await _sincronizarKmDoVeiculo(abastecimento.kmAtual);
   }
 
   Future<void> remover(String id) {
     return _repository.delete(uid, id, veiculoId: _veiculoId);
+  }
+
+  /// Propaga o km do abastecimento para o veículo. É um efeito colateral: o
+  /// abastecimento já foi gravado quando isso roda, então uma falha aqui não
+  /// pode ser reportada como falha de salvamento (o usuário tentaria de novo e
+  /// duplicaria o registro).
+  Future<void> _sincronizarKmDoVeiculo(int km) async {
+    try {
+      await _atualizarKmSeNecessario(km);
+    } catch (erro, stack) {
+      debugPrint('Falha ao sincronizar km do veículo: $erro\n$stack');
+    }
   }
 
   Future<void> _atualizarKmSeNecessario(int km) async {

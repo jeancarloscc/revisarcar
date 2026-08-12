@@ -6,6 +6,28 @@ import 'package:revisacar/providers/abastecimento_provider.dart';
 import 'package:revisacar/repositories/abastecimento_repository.dart';
 import 'package:revisacar/repositories/veiculo_repository.dart';
 
+/// Simula o cenário real de falha: as regras do Firestore permitem escrever na
+/// subcoleção de abastecimentos, mas negam a leitura/escrita do doc do veículo.
+class _VeiculoRepositoryQueFalha extends VeiculoRepository {
+  _VeiculoRepositoryQueFalha(super.firestore);
+
+  @override
+  Future<Veiculo?> get(String uid, String id, {String? veiculoId}) async {
+    throw StateError('permission-denied');
+  }
+}
+
+Abastecimento _abastecimento({required String veiculoId, required int kmAtual, String id = ''}) =>
+    Abastecimento(
+      id: id,
+      veiculoId: veiculoId,
+      data: DateTime(2026, 1, 1),
+      kmAtual: kmAtual,
+      litros: 30,
+      valorTotal: 180,
+      tanqueCheio: true,
+    );
+
 void main() {
   test('escutarVeiculo carrega os abastecimentos daquele veículo', () async {
     final firestore = FakeFirebaseFirestore();
@@ -66,5 +88,57 @@ void main() {
 
     final veiculoAtualizado = await veiculoRepository.get('uid1', veiculoId);
     expect(veiculoAtualizado?.kmAtual, 40500);
+  });
+
+  test('adicionar não propaga erro quando a sincronização do km do veículo falha', () async {
+    final firestore = FakeFirebaseFirestore();
+    final provider = AbastecimentoProvider(
+      repository: AbastecimentoRepository(firestore),
+      veiculoRepository: _VeiculoRepositoryQueFalha(firestore),
+      uid: 'uid1',
+    );
+    provider.escutarVeiculo('v1');
+
+    await expectLater(
+      provider.adicionar(_abastecimento(veiculoId: 'v1', kmAtual: 40500)),
+      completes,
+    );
+
+    final salvos = await AbastecimentoRepository(firestore).getAll('uid1', veiculoId: 'v1');
+    expect(salvos, hasLength(1), reason: 'o abastecimento precisa ficar gravado mesmo assim');
+  });
+
+  test('atualizar propaga o km editado para o veículo', () async {
+    final firestore = FakeFirebaseFirestore();
+    final veiculoRepository = VeiculoRepository(firestore);
+    final veiculoId = await veiculoRepository.add(
+      'uid1',
+      const Veiculo(
+        id: '',
+        nome: 'HB20',
+        modelo: 'Hyundai HB20',
+        ano: 2020,
+        placa: 'ABC1D23',
+        kmAtual: 40000,
+        tipoVeiculo: TipoVeiculo.carro,
+      ),
+    );
+    final repository = AbastecimentoRepository(firestore);
+    final provider = AbastecimentoProvider(
+      repository: repository,
+      veiculoRepository: veiculoRepository,
+      uid: 'uid1',
+    );
+    provider.escutarVeiculo(veiculoId);
+    final id = await repository.add(
+      'uid1',
+      _abastecimento(veiculoId: veiculoId, kmAtual: 40200),
+      veiculoId: veiculoId,
+    );
+
+    await provider.atualizar(_abastecimento(id: id, veiculoId: veiculoId, kmAtual: 40800));
+
+    final veiculoAtualizado = await veiculoRepository.get('uid1', veiculoId);
+    expect(veiculoAtualizado?.kmAtual, 40800);
   });
 }
