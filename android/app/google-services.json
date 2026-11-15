@@ -29,6 +29,64 @@
       "api_key": [
         {
           "current_key": "AIzaSyAyhYEmqjPz3b8-iFBQMMnBHgWFQSKo2jE"
+        },
+        {
+          "current_key": "AIzaSyB5PS7yaRYmj0afU-n23Bga_1LZh3P4Gj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814602654247-2tr7rd3fot1mj85hjae36ajkm3lirepm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "814602654247-8sh9ri9evfpsgm8tuic80l2at6ru1616.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.revisacar"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814602654247:android:e339db35af46bf523eb402",
+        "android_client_info": {
+          "package_name": "com.jeancarloscc.revisarcar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814602654247-cf4sge7fiu94du2di0qvque5tn73b0rj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jeancarloscc.revisarcar",
+            "certificate_hash": "58ab6d6a8bef135c9533f5f361986954f95ee033"
+          }
+        },
+        {
+          "client_id": "814602654247-jr6721698e7o0qv3j7plu296023fbm8c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jeancarloscc.revisarcar",
+            "certificate_hash": "2baaa3fda19c9a413a0a328095ad8c1ecb62f7d3"
+          }
+        },
+        {
+          "client_id": "814602654247-2tr7rd3fot1mj85hjae36ajkm3lirepm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyhYEmqjPz3b8-iFBQMMnBHgWFQSKo2jE"
+        },
+        {
+          "current_key": "AIzaSyB5PS7yaRYmj0afU-n23Bga_1LZh3P4Gj0"
         }
       ],
       "services": {

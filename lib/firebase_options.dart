@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAyhYEmqjPz3b8-iFBQMMnBHgWFQSKo2jE',
-    appId: '1:814602654247:android:fe4e9b1b77c178963eb402',
+    appId: '1:814602654247:android:e339db35af46bf523eb402',
     messagingSenderId: '814602654247',
     projectId: 'revisacar-veicular',
     storageBucket: 'revisacar-veicular.firebasestorage.app',
@@ -59,11 +59,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCJ0HJiQ9jNBWho_uaqNBF-jY68wDkclYI',
-    appId: '1:814602654247:ios:27d85df71ee0f5a83eb402',
+    appId: '1:814602654247:ios:4cbd4de4b1be9a583eb402',
     messagingSenderId: '814602654247',
     projectId: 'revisacar-veicular',
     storageBucket: 'revisacar-veicular.firebasestorage.app',
-    iosBundleId: 'com.example.revisacar',
+    androidClientId: '814602654247-9ko0q7s5m930rl29gee97ku1acg5edrc.apps.googleusercontent.com',
+    iosClientId: '814602654247-ebgua1092sisi1t2gijd55d6i2p10s7j.apps.googleusercontent.com',
+    iosBundleId: 'com.jeancarloscc.revisarcar',
   );
 
 }

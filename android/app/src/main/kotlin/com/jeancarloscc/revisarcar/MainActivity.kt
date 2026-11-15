@@ -1,4 +1,4 @@
-package com.example.revisacar
+package com.jeancarloscc.revisarcar
 
 import io.flutter.embedding.android.FlutterActivity
 
