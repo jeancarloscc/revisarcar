@@ -26,3 +26,9 @@ App Flutter para controle de manutenção veicular (carros e motos): histórico 
 ```
 flutter test
 ```
+
+## Licença
+
+Copyright (C) 2026 Jean Carlos
+
+Este projeto é distribuído sob a licença [GNU GPL v3.0](LICENSE).
