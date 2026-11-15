@@ -169,4 +169,48 @@ void main() {
       expect(status, StatusLembrete.vencido);
     });
   });
+
+  group('LembreteService.proximosAvisos', () {
+    test('início no futuro: primeiro aviso às 9h do dia de início', () {
+      final avisos = LembreteService.proximosAvisos(
+        inicio: DateTime(2026, 3, 10),
+        repeticaoDias: 3,
+        agora: DateTime(2026, 3, 1, 15),
+      );
+
+      expect(avisos, [DateTime(2026, 3, 10, 9), DateTime(2026, 3, 13, 9), DateTime(2026, 3, 16, 9)]);
+    });
+
+    test('início no passado: mantém a cadência e só devolve avisos futuros', () {
+      final avisos = LembreteService.proximosAvisos(
+        inicio: DateTime(2026, 3, 10),
+        repeticaoDias: 3,
+        agora: DateTime(2026, 3, 16, 10),
+      );
+
+      expect(avisos, [DateTime(2026, 3, 19, 9), DateTime(2026, 3, 22, 9), DateTime(2026, 3, 25, 9)]);
+    });
+
+    test('no dia de um aviso, antes das 9h, o aviso do dia ainda entra', () {
+      final avisos = LembreteService.proximosAvisos(
+        inicio: DateTime(2026, 3, 10),
+        repeticaoDias: 3,
+        agora: DateTime(2026, 3, 13, 8),
+        quantidade: 1,
+      );
+
+      expect(avisos, [DateTime(2026, 3, 13, 9)]);
+    });
+
+    test('repetição 0 é tratada como diária', () {
+      final avisos = LembreteService.proximosAvisos(
+        inicio: DateTime(2026, 3, 10),
+        repeticaoDias: 0,
+        agora: DateTime(2026, 3, 10, 12),
+        quantidade: 2,
+      );
+
+      expect(avisos, [DateTime(2026, 3, 11, 9), DateTime(2026, 3, 12, 9)]);
+    });
+  });
 }

@@ -13,6 +13,7 @@ import 'providers/veiculo_provider.dart';
 import 'repositories/veiculo_repository.dart';
 import 'screens/login_screen.dart';
 import 'screens/veiculo_list_screen.dart';
+import 'services/notificacao_service.dart';
 import 'theme/app_theme.dart';
 
 Future<void> main() async {
@@ -20,6 +21,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
   final prefs = await SharedPreferences.getInstance();
+  await NotificacaoService.inicializar();
   runApp(RevisaCarApp(prefs: prefs));
 }
 
@@ -64,11 +66,17 @@ class RevisaCarApp extends StatelessWidget {
 
           return ChangeNotifierProvider<VeiculoProvider>(
             key: ValueKey(user.uid),
-            create: (context) => VeiculoProvider(
-              repository: context.read<VeiculoRepository>(),
-              prefs: context.read<SharedPreferences>(),
-              uid: user.uid,
-            ),
+            create: (context) {
+              final provider = VeiculoProvider(
+                repository: context.read<VeiculoRepository>(),
+                prefs: context.read<SharedPreferences>(),
+                uid: user.uid,
+              );
+              provider.addListener(
+                () => NotificacaoService.sincronizar(user.uid, provider.veiculos),
+              );
+              return provider;
+            },
             child: MaterialApp(
               title: 'RevisaCar',
               theme: appThemeLight,

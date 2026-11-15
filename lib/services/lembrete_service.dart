@@ -46,4 +46,25 @@ class LembreteService {
 
     return StatusLembrete.emDia;
   }
+
+  /// Próximos avisos depois de `agora`, sempre às 9h: o primeiro cai no dia
+  /// de `inicio` e os seguintes se repetem a cada `repeticaoDias`.
+  static List<DateTime> proximosAvisos({
+    required DateTime inicio,
+    required int repeticaoDias,
+    required DateTime agora,
+    int quantidade = 3,
+  }) {
+    // O formulário aceita 0; sem isso a divisão abaixo falharia.
+    final repeticao = repeticaoDias < 1 ? 1 : repeticaoDias;
+    final primeiro = DateTime(inicio.year, inicio.month, inicio.day, 9);
+    var k = primeiro.isAfter(agora) ? 0 : agora.difference(primeiro).inDays ~/ repeticao;
+    final avisos = <DateTime>[];
+    while (avisos.length < quantidade) {
+      final aviso = DateTime(primeiro.year, primeiro.month, primeiro.day + k * repeticao, 9);
+      if (aviso.isAfter(agora)) avisos.add(aviso);
+      k++;
+    }
+    return avisos;
+  }
 }

@@ -14,6 +14,7 @@ import '../repositories/lembrete_repository.dart';
 import '../repositories/manutencao_repository.dart';
 import '../repositories/veiculo_repository.dart';
 import '../services/lembrete_service.dart';
+import '../services/notificacao_service.dart';
 import '../widgets/abastecimento_tab.dart';
 import '../widgets/checklist_tab.dart';
 import '../widgets/lembrete_tab.dart';
@@ -41,6 +42,9 @@ class _DetalheVeiculoScreenState extends State<DetalheVeiculoScreen> {
     );
     final uid = veiculoProvider.uid;
     final colorScheme = Theme.of(context).colorScheme;
+    // Manutenções e lembretes mudam as metas, então as notificações são refeitas.
+    void sincronizarNotificacoes() =>
+        NotificacaoService.sincronizar(uid, veiculoProvider.veiculos);
 
     return MultiProvider(
       key: ValueKey(widget.veiculo.id),
@@ -51,7 +55,9 @@ class _DetalheVeiculoScreenState extends State<DetalheVeiculoScreen> {
             veiculoRepository: context.read<VeiculoRepository>(),
             lembreteRepository: LembreteRepository(),
             uid: uid,
-          )..escutarVeiculo(widget.veiculo.id),
+          )
+            ..escutarVeiculo(widget.veiculo.id)
+            ..addListener(sincronizarNotificacoes),
         ),
         ChangeNotifierProvider<AbastecimentoProvider>(
           create: (context) => AbastecimentoProvider(
@@ -64,7 +70,9 @@ class _DetalheVeiculoScreenState extends State<DetalheVeiculoScreen> {
           create: (context) => LembreteProvider(
             repository: LembreteRepository(),
             uid: uid,
-          )..escutarVeiculo(widget.veiculo.id),
+          )
+            ..escutarVeiculo(widget.veiculo.id)
+            ..addListener(sincronizarNotificacoes),
         ),
         ChangeNotifierProvider<ChecklistProvider>(
           create: (context) => ChecklistProvider(
