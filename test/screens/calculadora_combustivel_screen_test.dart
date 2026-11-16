@@ -61,7 +61,7 @@ void main() {
       ),
     ));
 
-    await tester.tap(find.text('Orçamento → alcance'));
+    await tester.tap(find.text('Orçamento → Alcance'));
     await tester.pump();
 
     await tester.enterText(find.byType(TextFormField).at(0), '10');

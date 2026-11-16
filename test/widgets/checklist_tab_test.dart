@@ -49,7 +49,7 @@ void main() {
       ordem: 0,
       verificado: false,
     ));
-    await Future<void>.delayed(Duration.zero);
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
 
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
@@ -57,7 +57,7 @@ void main() {
 
     await tester.tap(find.byType(Checkbox));
     await tester.pump();
-    await Future<void>.delayed(Duration.zero);
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
     await tester.pump();
 
     expect(provider.checklistItems.single.verificado, isTrue);
@@ -71,7 +71,7 @@ void main() {
       ordem: 0,
       verificado: false,
     ));
-    await Future<void>.delayed(Duration.zero);
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
 
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
@@ -95,7 +95,7 @@ void main() {
       ordem: 1,
       verificado: false,
     ));
-    await Future<void>.delayed(Duration.zero);
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
 
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
@@ -111,7 +111,7 @@ void main() {
       matching: find.text('Reiniciar'),
     ));
     await tester.pumpAndSettle();
-    await Future<void>.delayed(Duration.zero);
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
     await tester.pump();
 
     expect(provider.checklistItems.every((i) => !i.verificado), isTrue);
